@@ -2,6 +2,10 @@ package com.wyy.music.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wyy.music.domain.User;
+import com.wyy.music.mapper.UserMapper;
+import com.wyy.music.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
