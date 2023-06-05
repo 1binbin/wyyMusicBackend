@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wyy.music.mapper">
 
-    <resultMap id="BaseResultMap" type="com.wyy.music.domain.User">
+    <resultMap id="BaseResultMap" type="com.wyy.music.model.domain.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="gender" column="gender" jdbcType="INTEGER"/>
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>

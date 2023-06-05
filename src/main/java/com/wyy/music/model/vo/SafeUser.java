@@ -1,4 +1,4 @@
-package com.wyy.music.domain;
+package com.wyy.music.model.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

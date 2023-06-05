@@ -2,7 +2,7 @@ package com.wyy.music.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wyy.music.domain.User;
+import com.wyy.music.model.domain.User;
 
 /**
  * @author hongxiaobin
@@ -11,5 +11,12 @@ import com.wyy.music.domain.User;
  */
 public interface UserService extends IService<User> {
 
-
+    /**
+     * 用户登录
+     *
+     * @param phone    手机号
+     * @param password 密码
+     * @return
+     */
+    User userLogin(String phone, String password);
 }

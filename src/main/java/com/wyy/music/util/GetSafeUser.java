@@ -1,7 +1,7 @@
 package com.wyy.music.util;
 
-import com.wyy.music.domain.SafeUser;
-import com.wyy.music.domain.User;
+import com.wyy.music.model.vo.SafeUser;
+import com.wyy.music.model.domain.User;
 
 /**
  * @Author hongxiaobin

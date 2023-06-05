@@ -1,7 +1,7 @@
 package com.wyy.music.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.wyy.music.domain.User;
+import com.wyy.music.model.domain.User;
 
 /**
  * @Author hongxiaobin
