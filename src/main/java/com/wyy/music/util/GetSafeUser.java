@@ -11,6 +11,7 @@ public class GetSafeUser {
     public static SafeUser getSafeUser(User user) {
         SafeUser getSafeUser = new SafeUser();
         getSafeUser.setId(user.getId());
+        getSafeUser.setUid(user.getUid());
         getSafeUser.setGender(user.getGender());
         getSafeUser.setNickname(user.getNickname());
         getSafeUser.setAvatarUrl(user.getAvatarUrl());
