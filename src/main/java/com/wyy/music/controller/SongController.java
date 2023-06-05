@@ -28,19 +28,21 @@ public class SongController {
     private SongCollectRecentlyService songCollectRecentlyService;
 
     /**
-     * 保存最近播放歌曲
+     * 保存最近播放歌曲、收藏歌曲
      *
      * @param uid     用户id
      * @param musicId 音乐id
+     * @param type    0-最近播放，1-收藏
      * @return 请求结果
      */
-    @GetMapping("/save/recently")
+    @GetMapping("/save")
     public Result<String> saveRecentlySong(@RequestParam String uid,
-                                           @RequestParam String musicId) {
+                                           @RequestParam String musicId,
+                                           @RequestParam(defaultValue = "0") Integer type) {
         if (StringUtils.isAnyBlank(uid, musicId)) {
             return Result.build(null, ResultCodeEnum.DATA_ERROR);
         }
-        return songCollectRecentlyService.saveSongRecently(uid, musicId);
+        return songCollectRecentlyService.saveSongRecently(uid, musicId, type);
     }
 
     /**
@@ -58,4 +60,20 @@ public class SongController {
         }
         return songCollectRecentlyService.getRecentlySong(uid, limit);
     }
+
+    /**
+     * 取消收藏
+     * @param uid 用户id
+     * @param musicId 音乐id
+     * @return 请求结果
+     */
+    @GetMapping("/delete/collect")
+    public Result<String> deleteCollectSong(@RequestParam String uid,
+                                            @RequestParam String musicId) {
+        if (StringUtils.isAnyBlank(uid,musicId)) {
+            return Result.build(null, ResultCodeEnum.DATA_ERROR);
+        }
+        return songCollectRecentlyService.deleteCollectSong(uid,musicId);
+    }
+
 }

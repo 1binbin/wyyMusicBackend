@@ -17,9 +17,10 @@ public interface SongCollectRecentlyService extends IService<SongCollectRecently
      * 保存最近播放的歌曲
      * @param uid 用户id
      * @param musicId 音乐id
+     * @param type 0-最近播放，1-收藏
      * @return 请求结果
      */
-    Result<String> saveSongRecently(String uid, String musicId);
+    Result<String> saveSongRecently(String uid, String musicId,Integer type);
 
     /**
      * 获取最近播放的歌曲
@@ -28,4 +29,12 @@ public interface SongCollectRecentlyService extends IService<SongCollectRecently
      * @return 音乐ID集合
      */
     Result<List<String>> getRecentlySong(String uid, Integer limit);
+
+    /**
+     * 取消收藏
+     * @param uid 用户ID
+     * @param musicId 音乐ID
+     * @return 请求结果
+     */
+    Result<String> deleteCollectSong(String uid, String musicId);
 }

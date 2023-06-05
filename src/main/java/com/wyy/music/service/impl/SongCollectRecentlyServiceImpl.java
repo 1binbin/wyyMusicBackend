@@ -33,20 +33,18 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
      *
      * @param uid     用户id
      * @param musicId 音乐id
+     * @param type    0-最近播放，1-收藏
      * @return 请求结果
      */
     @Override
-    public Result<String> saveSongRecently(String uid, String musicId) {
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("uid", uid);
-        User user = userMapper.selectOne(userQueryWrapper);
-        if (user == null) {
+    public Result<String> saveSongRecently(String uid, String musicId, Integer type) {
+        if (!getListResult(uid)) {
             return Result.build("用户uid不存在", ResultCodeEnum.FAIL);
         }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
         songCollectRecentlyQueryWrapper.eq("uid", uid);
         songCollectRecentlyQueryWrapper.eq("music_id", musicId);
-        songCollectRecentlyQueryWrapper.eq("type", 0);
+        songCollectRecentlyQueryWrapper.eq("type", type);
         SongCollectRecently songCollectRecently1 = songCollectRecentlyMapper.selectOne(songCollectRecentlyQueryWrapper);
         // 原有已存在，那么先删除
         if (songCollectRecently1 != null) {
@@ -56,7 +54,7 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
         SongCollectRecently songCollectRecently = new SongCollectRecently();
         songCollectRecently.setUid(uid);
         songCollectRecently.setMusicId(musicId);
-        songCollectRecently.setType(0);
+        songCollectRecently.setType(type);
         boolean save = this.save(songCollectRecently);
         if (!save) {
             return Result.build("保存失败", ResultCodeEnum.FAIL);
@@ -73,6 +71,9 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
      */
     @Override
     public Result<List<String>> getRecentlySong(String uid, Integer limit) {
+        if (!getListResult(uid)) {
+            return Result.build(null, ResultCodeEnum.FAIL);
+        }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
         songCollectRecentlyQueryWrapper.eq("uid", uid);
         songCollectRecentlyQueryWrapper.eq("type", 0);
@@ -84,6 +85,43 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
             list.add(songCollectRecently.getMusicId());
         }
         return Result.ok(list);
+    }
+
+
+    /**
+     * 取消收藏
+     *
+     * @param uid     用户ID
+     * @param musicId 音乐ID
+     * @return 请求结果
+     */
+    @Override
+    public Result<String> deleteCollectSong(String uid, String musicId) {
+        if (!getListResult(uid)) {
+            return Result.build("用户uid不存在", ResultCodeEnum.FAIL);
+        }
+        QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
+        songCollectRecentlyQueryWrapper.eq("uid", uid);
+        songCollectRecentlyQueryWrapper.eq("music_id", musicId);
+        songCollectRecentlyQueryWrapper.eq("type", 1);
+        int delete = songCollectRecentlyMapper.delete(songCollectRecentlyQueryWrapper);
+        if (delete == 0) {
+            return Result.build("取消收藏失败", ResultCodeEnum.FAIL);
+        }
+        return Result.ok("音乐ID： " + musicId + " 取消收藏成功");
+    }
+
+    /**
+     * 判断用户是否存在
+     *
+     * @param uid 用户ID
+     * @return 是否存在
+     */
+    private boolean getListResult(String uid) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("uid", uid);
+        User user = userMapper.selectOne(userQueryWrapper);
+        return user != null;
     }
 }
 
