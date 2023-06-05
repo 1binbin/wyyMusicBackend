@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * 
  * @TableName song_collect_recently
  */
-@TableName(value ="song_collect_recently")
+@TableName(value = "song_collect_recently")
 @Data
 public class SongCollectRecently implements Serializable {
     /**
@@ -31,7 +31,7 @@ public class SongCollectRecently implements Serializable {
      * 音乐id
      */
     @TableField(value = "music_id")
-    private String music_id;
+    private String musicId;
 
     /**
      * 保存类型，0-最近播放，1-收藏

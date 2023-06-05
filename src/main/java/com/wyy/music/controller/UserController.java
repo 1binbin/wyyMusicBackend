@@ -107,6 +107,12 @@ public class UserController {
         return Result.ok(GetSafeUser.getSafeUser(user));
     }
 
+    /**
+     * 修改用户信息
+     * @param userUpdate 要修改的用户信息
+     * @return 脱敏用户信息
+     * @throws Exception
+     */
     @PostMapping("/update")
     public Result<SafeUser> updateUser(@RequestBody UserUpdate userUpdate) throws Exception {
         if (userUpdate == null) {
