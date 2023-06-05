@@ -1,5 +1,6 @@
 package com.wyy.music.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wyy.music.common.Result;
 import com.wyy.music.common.ResultCodeEnum;
 import com.wyy.music.mapper.UserMapper;
@@ -65,7 +66,21 @@ public class UserController {
         }
         User user = userService.userRegister(phone, password, checkPassword, type);
         if (user == null) {
-            return Result.build(null,ResultCodeEnum.FAIL);
+            return Result.build(null, ResultCodeEnum.FAIL);
+        }
+        return Result.ok(GetSafeUser.getSafeUser(user));
+    }
+
+    @GetMapping("userinfo")
+    public Result<SafeUser> getUserInfo(@RequestParam() String phone) {
+        if (StringUtils.isAnyBlank(phone)) {
+            return Result.build(null, ResultCodeEnum.PHONE_ERROR);
+        }
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> queryWrapper = userQueryWrapper.eq("phone", phone);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user == null) {
+            return Result.ok(null);
         }
         return Result.ok(GetSafeUser.getSafeUser(user));
     }
