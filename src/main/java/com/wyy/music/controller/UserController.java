@@ -4,16 +4,14 @@ import com.wyy.music.common.Result;
 import com.wyy.music.common.ResultCodeEnum;
 import com.wyy.music.mapper.UserMapper;
 import com.wyy.music.model.domain.User;
+import com.wyy.music.model.request.UserRegister;
 import com.wyy.music.model.vo.SafeUser;
 import com.wyy.music.service.UserService;
 import com.wyy.music.util.GetSafeUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -49,6 +47,25 @@ public class UserController {
         if (!DigestUtils.md5DigestAsHex((SALT + password).getBytes()).equals(user.getPassword())) {
             log.info("Password error");
             return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
+        }
+        return Result.ok(GetSafeUser.getSafeUser(user));
+    }
+
+    @PostMapping("/register")
+    public Result<SafeUser> userRegister(@RequestBody UserRegister userRegister) {
+        if (userRegister == null) {
+            return Result.build(null, ResultCodeEnum.OBJECT_ERROR);
+        }
+        String phone = userRegister.getPhone();
+        String password = userRegister.getPassword();
+        String checkPassword = userRegister.getCheckPassword();
+        int type = userRegister.getType();
+        if (StringUtils.isAnyBlank(phone, password, checkPassword)) {
+            return Result.build(null, ResultCodeEnum.DATA_ERROR);
+        }
+        User user = userService.userRegister(phone, password, checkPassword, type);
+        if (user == null) {
+            return Result.build(null,ResultCodeEnum.FAIL);
         }
         return Result.ok(GetSafeUser.getSafeUser(user));
     }

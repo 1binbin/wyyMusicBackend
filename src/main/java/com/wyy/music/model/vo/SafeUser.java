@@ -24,7 +24,7 @@ public class SafeUser implements Serializable {
     /**
      * 用户id
      */
-    private Integer uid;
+    private String uid;
     /**
      * 昵称
      */

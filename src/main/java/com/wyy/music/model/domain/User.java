@@ -24,7 +24,7 @@ public class User implements Serializable {
      * 用户id
      */
     @TableField(value = "uid")
-    private Integer uid;
+    private String uid;
     /**
      * 性别 0-女 1-男
      */
