@@ -3,6 +3,7 @@ package com.wyy.music.controller;
 import com.wyy.music.common.Result;
 import com.wyy.music.common.ResultCodeEnum;
 import com.wyy.music.mapper.SongCollectRecentlyMapper;
+import com.wyy.music.model.vo.SongIsCollect;
 import com.wyy.music.service.SongCollectRecentlyService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -63,17 +64,33 @@ public class SongController {
 
     /**
      * 取消收藏
-     * @param uid 用户id
+     *
+     * @param uid     用户id
      * @param musicId 音乐id
      * @return 请求结果
      */
     @GetMapping("/delete/collect")
     public Result<String> deleteCollectSong(@RequestParam String uid,
                                             @RequestParam String musicId) {
-        if (StringUtils.isAnyBlank(uid,musicId)) {
+        if (StringUtils.isAnyBlank(uid, musicId)) {
             return Result.build(null, ResultCodeEnum.DATA_ERROR);
         }
-        return songCollectRecentlyService.deleteCollectSong(uid,musicId);
+        return songCollectRecentlyService.deleteCollectSong(uid, musicId);
+    }
+
+    /**
+     * 判断歌曲是否收藏
+     * @param uid 用户ID
+     * @param musciId 音乐ID
+     * @return 响应数据
+     */
+    @GetMapping("/iscollect")
+    public Result<SongIsCollect> getIsCollect(@RequestParam String uid,
+                                              @RequestParam String musicId) {
+        if (StringUtils.isAnyBlank(uid, musicId)) {
+            return Result.build(null, ResultCodeEnum.DATA_ERROR);
+        }
+        return songCollectRecentlyService.getIsCollect(uid,musicId);
     }
 
 }

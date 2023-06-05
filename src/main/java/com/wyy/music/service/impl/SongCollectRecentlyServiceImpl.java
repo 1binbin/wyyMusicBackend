@@ -8,6 +8,7 @@ import com.wyy.music.mapper.SongCollectRecentlyMapper;
 import com.wyy.music.mapper.UserMapper;
 import com.wyy.music.model.domain.SongCollectRecently;
 import com.wyy.music.model.domain.User;
+import com.wyy.music.model.vo.SongIsCollect;
 import com.wyy.music.service.SongCollectRecentlyService;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
      */
     @Override
     public Result<String> saveSongRecently(String uid, String musicId, Integer type) {
-        if (!getListResult(uid)) {
+        if (getListResult(uid)) {
             return Result.build("用户uid不存在", ResultCodeEnum.FAIL);
         }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
@@ -71,7 +72,7 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
      */
     @Override
     public Result<List<String>> getRecentlySong(String uid, Integer limit) {
-        if (!getListResult(uid)) {
+        if (getListResult(uid)) {
             return Result.build(null, ResultCodeEnum.FAIL);
         }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
@@ -97,7 +98,7 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
      */
     @Override
     public Result<String> deleteCollectSong(String uid, String musicId) {
-        if (!getListResult(uid)) {
+        if (getListResult(uid)) {
             return Result.build("用户uid不存在", ResultCodeEnum.FAIL);
         }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
@@ -112,16 +113,40 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
     }
 
     /**
+     * 判断歌曲是否收藏
+     *
+     * @param uid     用户ID
+     * @param musciId 音乐ID
+     * @return 响应数据
+     */
+    @Override
+    public Result<SongIsCollect> getIsCollect(String uid, String musciId) {
+        if (getListResult(uid)) {
+            return Result.build(null, ResultCodeEnum.FAIL);
+        }
+        QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
+        songCollectRecentlyQueryWrapper.eq("uid", uid);
+        songCollectRecentlyQueryWrapper.eq("music_id", musciId);
+        songCollectRecentlyQueryWrapper.eq("type", 1);
+        SongCollectRecently songCollectRecently = songCollectRecentlyMapper.selectOne(songCollectRecentlyQueryWrapper);
+        SongIsCollect songIsCollect = new SongIsCollect();
+        songIsCollect.setUid(uid);
+        songIsCollect.setMusicId(musciId);
+        songIsCollect.setIsCollect(songCollectRecently != null);
+        return Result.ok(songIsCollect);
+    }
+
+    /**
      * 判断用户是否存在
      *
      * @param uid 用户ID
-     * @return 是否存在
+     * @return 是否不存在
      */
     private boolean getListResult(String uid) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("uid", uid);
         User user = userMapper.selectOne(userQueryWrapper);
-        return user != null;
+        return user == null;
     }
 }
 
