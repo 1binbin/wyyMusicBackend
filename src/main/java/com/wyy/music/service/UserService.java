@@ -2,7 +2,9 @@ package com.wyy.music.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wyy.music.common.Result;
 import com.wyy.music.model.domain.User;
+import com.wyy.music.model.vo.SafeUser;
 
 /**
  * @author hongxiaobin
@@ -18,7 +20,7 @@ public interface UserService extends IService<User> {
      * @param password 密码
      * @return 用户信息
      */
-    User userLogin(String phone, String password);
+    Result<SafeUser> userLogin(String phone, String password);
 
     /**
      * 用户注册/重置密码

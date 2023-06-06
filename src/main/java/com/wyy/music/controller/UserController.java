@@ -6,6 +6,7 @@ import com.wyy.music.common.ResultCodeEnum;
 import com.wyy.music.exception.BusinessException;
 import com.wyy.music.mapper.UserMapper;
 import com.wyy.music.model.domain.User;
+import com.wyy.music.model.request.UserLogin;
 import com.wyy.music.model.request.UserRegister;
 import com.wyy.music.model.request.UserUpdate;
 import com.wyy.music.model.vo.SafeUser;
@@ -38,28 +39,21 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param phone    手机号
-     * @param password 密码
+     * @param userLogin 请求对象
      * @return 用户脱敏信息
      */
-    @GetMapping("/login")
-    public Result<SafeUser> userLogin(@RequestParam() String phone,
-                                      @RequestParam() String password) {
-        // TODO: 2023/6/3 0003 更改为POST请求
+    @PostMapping("/login")
+    public Result<SafeUser> userLogin(@RequestBody UserLogin userLogin) {
+        if (userLogin == null) {
+            return Result.build(null, ResultCodeEnum.OBJECT_ERROR);
+        }
+        String password = userLogin.getPassword();
+        String phone = userLogin.getPhone();
         if (StringUtils.isAnyBlank(phone, password)) {
             log.info("Parameter is empty");
             return Result.build(null, ResultCodeEnum.DATA_ERROR);
         }
-        User user = userService.userLogin(phone, password);
-        if (user == null) {
-            log.info("Mobile number error，{}", phone);
-            return Result.build(null, ResultCodeEnum.PHONE_ERROR);
-        }
-        if (!DigestUtils.md5DigestAsHex((SALT + password).getBytes()).equals(user.getPassword())) {
-            log.info("Password error");
-            return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
-        }
-        return Result.ok(GetSafeUser.getSafeUser(user));
+        return userService.userLogin(phone, password);
     }
 
     /**
@@ -109,6 +103,7 @@ public class UserController {
 
     /**
      * 修改用户信息
+     *
      * @param userUpdate 要修改的用户信息
      * @return 脱敏用户信息
      * @throws Exception

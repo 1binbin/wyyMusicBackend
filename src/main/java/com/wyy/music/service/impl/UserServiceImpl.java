@@ -3,11 +3,15 @@ package com.wyy.music.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wyy.music.common.Result;
 import com.wyy.music.common.ResultCodeEnum;
 import com.wyy.music.exception.BusinessException;
 import com.wyy.music.mapper.UserMapper;
 import com.wyy.music.model.domain.User;
+import com.wyy.music.model.vo.SafeUser;
 import com.wyy.music.service.UserService;
+import com.wyy.music.util.GetSafeUser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -24,6 +28,7 @@ import static com.wyy.music.contant.UserContant.SALT;
  * @createDate 2023-06-03 09:59:30
  */
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Resource
@@ -34,13 +39,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      *
      * @param phone    手机号
      * @param password 密码
-     * @return
+     * @return 响应数据
      */
     @Override
-    public User userLogin(String phone, String password) {
+    public Result<SafeUser> userLogin(String phone, String password) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("phone", phone);
-        return userMapper.selectOne(userQueryWrapper);
+        User user = userMapper.selectOne(userQueryWrapper);
+        if (user == null) {
+            log.info("Mobile number error，{}", phone);
+            return Result.build(null, ResultCodeEnum.PHONE_ERROR);
+        }
+        if (!DigestUtils.md5DigestAsHex((SALT + password).getBytes()).equals(user.getPassword())) {
+            log.info("Password error");
+            return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
+        }
+        return Result.ok(GetSafeUser.getSafeUser(user));
     }
 
     /**
