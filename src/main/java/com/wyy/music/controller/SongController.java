@@ -47,19 +47,21 @@ public class SongController {
     }
 
     /**
-     * 获取最近播放的歌曲
+     * 获取最近播放、收藏的歌曲
      *
      * @param uid   用户ID
      * @param limit 返回的数目，默认为10
+     * @param type  0-最近播放，1-收藏
      * @return 音乐ID集合
      */
     @GetMapping("/recently/play")
     public Result<List<String>> getRecentlySong(@RequestParam String uid,
-                                                @RequestParam(defaultValue = "10", required = false) Integer limit) {
+                                                @RequestParam(defaultValue = "10", required = false) Integer limit,
+                                                @RequestParam(defaultValue = "0") Integer type) {
         if (StringUtils.isAnyBlank(uid)) {
             return Result.build(null, ResultCodeEnum.DATA_ERROR);
         }
-        return songCollectRecentlyService.getRecentlySong(uid, limit);
+        return songCollectRecentlyService.getRecentlySong(uid, limit,type);
     }
 
     /**
@@ -80,8 +82,9 @@ public class SongController {
 
     /**
      * 判断歌曲是否收藏
-     * @param uid 用户ID
-     * @param musciId 音乐ID
+     *
+     * @param uid     用户ID
+     * @param musicId 音乐ID
      * @return 响应数据
      */
     @GetMapping("/iscollect")
@@ -90,7 +93,7 @@ public class SongController {
         if (StringUtils.isAnyBlank(uid, musicId)) {
             return Result.build(null, ResultCodeEnum.DATA_ERROR);
         }
-        return songCollectRecentlyService.getIsCollect(uid,musicId);
+        return songCollectRecentlyService.getIsCollect(uid, musicId);
     }
 
 }

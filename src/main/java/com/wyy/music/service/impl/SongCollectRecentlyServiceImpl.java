@@ -64,20 +64,21 @@ public class SongCollectRecentlyServiceImpl extends ServiceImpl<SongCollectRecen
     }
 
     /**
-     * 获取最近播放的歌曲
+     * 获取最近播放、收藏的歌曲
      *
      * @param uid   用户ID
      * @param limit 数目
+     * @param type  0-最近播放，1-收藏
      * @return 音乐ID集合
      */
     @Override
-    public Result<List<String>> getRecentlySong(String uid, Integer limit) {
+    public Result<List<String>> getRecentlySong(String uid, Integer limit, Integer type) {
         if (getListResult(uid)) {
             return Result.build(null, ResultCodeEnum.FAIL);
         }
         QueryWrapper<SongCollectRecently> songCollectRecentlyQueryWrapper = new QueryWrapper<>();
         songCollectRecentlyQueryWrapper.eq("uid", uid);
-        songCollectRecentlyQueryWrapper.eq("type", 0);
+        songCollectRecentlyQueryWrapper.eq("type", type);
         songCollectRecentlyQueryWrapper.orderByDesc("createTime");
         songCollectRecentlyQueryWrapper.last("limit " + limit);
         List<SongCollectRecently> songCollectRecentlies = songCollectRecentlyMapper.selectList(songCollectRecentlyQueryWrapper);
