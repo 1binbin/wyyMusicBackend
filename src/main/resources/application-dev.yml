@@ -1,8 +1,8 @@
 qiniu:
   # Public key
-  accessKey: AInw755zXpHzJg8xC-ZIbgRwR_0QW7F7FikmrZU_
+  accessKey:
   # Private key
-  secretKey: p7YuVGxXvyKszPNthjgfd5nvUraiqu0CvQzAFFsp
+  secretKey:
   # Storage space name
   bucketName: 1binbin
   # Domain name/path
