@@ -11,9 +11,3 @@ qiniu:
   documentName: wyyMusic/
 
 
-# Maximum file upload, maximum single upload
-spring:
-  servlet:
-    multipart:
-      max-request-size: 20MB
-      max-file-size: 2MB

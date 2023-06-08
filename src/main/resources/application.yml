@@ -10,6 +10,11 @@ spring:
     url: jdbc:mysql://localhost:3306/wyymusic?serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+    # Maximum file upload, maximum single upload
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 2MB
 server:
   port: 8080
   #  Uniform request prefix
