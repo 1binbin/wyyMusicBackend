@@ -12,11 +12,14 @@ import com.wyy.music.model.vo.SafeUser;
 import com.wyy.music.service.UserService;
 import com.wyy.music.util.GetSafeUser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -89,9 +92,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (type == 0) {
             // 注册
             if (selectCount == 0) {
-                user.setNickname(phone.substring(0, 4));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                user.setNickname(RandomStringUtils.randomAlphanumeric(12));
                 user.setPhone(phone);
                 user.setPassword(md5DigestAsHex);
+                try {
+                    user.setBirthday(dateFormat.parse("1900-01-01"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 user.setUid(UUID.randomUUID().toString().replace("-", ""));
                 boolean save = this.save(user);
                 if (save) {
