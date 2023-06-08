@@ -1,0 +1,19 @@
+qiniu:
+  # Public key
+  accessKey: AInw755zXpHzJg8xC-ZIbgRwR_0QW7F7FikmrZU_
+  # Private key
+  secretKey: p7YuVGxXvyKszPNthjgfd5nvUraiqu0CvQzAFFsp
+  # Storage space name
+  bucketName: 1binbin
+  # Domain name/path
+  path: http://rvw167yid.hn-bkt.clouddn.com
+  # The file names stored in the space do not need to be deleted
+  documentName: wyyMusic/
+
+
+# Maximum file upload, maximum single upload
+spring:
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 2MB

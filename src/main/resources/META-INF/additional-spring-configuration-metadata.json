@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "qiniu.accessKey",
+      "type": "java.lang.String",
+      "description": "Description for qiniu.accessKey."
+  }
+] }
