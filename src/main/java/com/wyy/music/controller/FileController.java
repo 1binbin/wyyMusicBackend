@@ -28,7 +28,7 @@ public class FileController {
     private QiniuFileUtils qiniuFileUtils;
 
     @PostMapping("/uploadimg")
-    public Result<FileUpload> uploadImg(MultipartFile file,
+        public Result<FileUpload> uploadImg(MultipartFile file,
                                         HttpServletRequest request) {
 
         String uid = request.getParameter("uid");
